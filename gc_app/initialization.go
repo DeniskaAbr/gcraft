@@ -16,15 +16,20 @@ func (a *App) initialize() error {
 	a.lastTime = gc_util.Now()
 	a.lastScreenAdvance = a.lastTime
 
+	a.renderer.SetWindowIcon("logo.png")
+
 	gui, err := gc_gui.CreateGuiManager()
 	if err != nil {
 		return err
 	}
 
 	a.guiManager = gui
-	a.screen = gc_screen.NewScreenManager(a.ui, a.guiManager)
 
-	a.renderer.SetWindowIcon("logo.png")
+	a.screen = gc_screen.NewScreenManager(a.ui, *a.Options.LogLevel, a.guiManager)
+
+	// a.audio.SetVolumes()
+
+	a.ui.Initialize()
 
 	return nil
 }

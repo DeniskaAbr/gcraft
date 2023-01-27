@@ -195,9 +195,9 @@ func (a *App) ToMainMenu(errorMessageOptional ...string) {
 		Commit: a.gitCommit,
 	}
 
-	mainMenu, err := gc_gamescreen.CreatMainMenu(a, a.renderer, a.ui, buildInfo, errorMessageOptional...)
+	mainMenu, err := gc_gamescreen.CreatMainMenu(a, a.renderer, a.audio, a.ui, buildInfo, *a.Options.LogLevel, errorMessageOptional...)
 	if err != nil {
-		// a.Error(err.Error()) logger error
+		a.Error(err.Error())
 		return
 	}
 
