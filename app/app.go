@@ -6,6 +6,11 @@ import (
 	"os"
 	"runtime"
 
+	"gcraft/gc_core/gc_screen"
+	"gcraft/gc_core/gc_ui"
+
+	"gcraft/gc_core/gc_gui"
+
 	"golang.org/x/image/colornames"
 
 	"gcraft/gc_common/gc_interface"
@@ -17,7 +22,10 @@ type App struct {
 	lastTime          float64
 	lastScreenAdvance float64
 	timeScale         float64
+	guiManager        *gc_gui.GuiManager
 	renderer          gc_interface.Renderer
+	screen            *gc_screen.ScreenManager
+	ui                *gc_ui.UIManager
 	errorMessage      error
 	config            *gc_config.Configuration
 	gitBranch         string

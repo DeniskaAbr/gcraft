@@ -3,6 +3,8 @@ package app
 import (
 	"gcraft/gc_common/gc_util"
 	"gcraft/gc_core/gc_config"
+	"gcraft/gc_core/gc_gui"
+	"gcraft/gc_core/gc_screen"
 )
 
 func (a *App) initialize() error {
@@ -13,6 +15,14 @@ func (a *App) initialize() error {
 	a.timeScale = 1.0
 	a.lastTime = gc_util.Now()
 	a.lastScreenAdvance = a.lastTime
+
+	gui, err := gc_gui.CreateGuiManager()
+	if err != nil {
+		return err
+	}
+
+	a.guiManager = gui
+	a.screen = gc_screen.NewScreenManager(a.ui, a.guiManager)
 
 	a.renderer.SetWindowIcon("logo.png")
 
