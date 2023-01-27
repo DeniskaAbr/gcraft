@@ -1,14 +1,14 @@
 package app
 
 import (
-	_interface "gcraft/common/interface"
+	app_interface "gcraft/common/interface"
 	"gcraft/core/config"
 	"gcraft/core/render/ebiten"
 	"runtime"
 )
 
 type App struct {
-	renderer     _interface.Renderer
+	renderer     app_interface.Renderer
 	errorMessage error
 	config       *config.Configuration
 	*Options
@@ -63,7 +63,7 @@ func updateNOOP() error {
 	return nil
 }
 
-func (a *App) updateInitError(target _interface.Surface) error {
+func (a *App) updateInitError(target app_interface.Surface) error {
 
 	return nil
 }

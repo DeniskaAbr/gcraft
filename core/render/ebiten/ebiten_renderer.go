@@ -23,6 +23,13 @@ type renderCallback = func(surface app_interface.Surface) error
 type updateCallback = func() error
 
 func (r *Renderer) ShowPanicScreen(message string) {
+	errorScreen := CreatePanicScreen(message)
+
+	err := ebiten.RunGame(errorScreen)
+	if err != nil {
+		panic(err)
+	}
+
 	//TODO implement me
 	panic("implement me")
 }
