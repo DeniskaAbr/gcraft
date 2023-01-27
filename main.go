@@ -3,7 +3,7 @@ package main
 import (
 	"log"
 
-	"gcraft/app"
+	"gcraft/gc_app"
 )
 
 var (
@@ -14,7 +14,7 @@ var (
 func main() {
 	log.SetFlags(log.Lshortfile)
 
-	instance := app.Create(GitBranch, GitCommit)
+	instance := gc_app.Create(GitBranch, GitCommit)
 
 	if err := instance.Run(); err != nil {
 		return

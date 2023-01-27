@@ -1,4 +1,4 @@
-package app
+package gc_app
 
 import (
 	"errors"
@@ -39,9 +39,14 @@ type App struct {
 	gitBranch         string
 	gitCommit         string
 	*Options
+
+	*gc_util.Logger
 }
 
-type Options struct{}
+type Options struct {
+	Debug    *bool
+	LogLevel *gc_util.LogLevel
+}
 
 const (
 	errMsgPadding = 20
@@ -54,13 +59,21 @@ const (
 func Create(gitBranch, gitCommit string) *App {
 	runtime.LockOSThread()
 
+	logger := gc_util.NewLogger()
+	logger.SetPrefix(appLoggerPrefix)
+
 	app := &App{
+		Logger:    logger,
 		gitBranch: gitBranch,
 		gitCommit: gitCommit,
 		Options:   &Options{},
 	}
 
+	app.Infof("gcraft - ebiten test app")
+
 	app.parseArguments()
+
+	app.SetLevel(*app.Options.LogLevel)
 
 	return app
 }
@@ -142,6 +155,16 @@ func (a *App) LoadConfig() (*gc_config.Configuration, error) {
 }
 
 func (a *App) parseArguments() {
+	const (
+		descLogging = "Enables verbose logging. Log levels will include those below it.\n" +
+			" 0 disables log messages\n" +
+			" 1 shows fatal\n" +
+			" 2 shows error\n" +
+			" 3 shows warning\n" +
+			" 4 shows info\n" +
+			" 5 shows debug\n"
+	)
+	a.Options.LogLevel = flag.Int("l", gc_util.LogLevelDefault, descLogging)
 	showVersion := flag.Bool("v", false, "Show version")
 	showHelp := flag.Bool("h", false, "Show help")
 
@@ -150,6 +173,10 @@ func (a *App) parseArguments() {
 		flag.PrintDefaults()
 	}
 	flag.Parse()
+
+	if *a.Options.LogLevel >= gc_util.LogLevelUnspecified {
+		*a.Options.LogLevel = gc_util.LogLevelDefault
+	}
 
 	if *showVersion {
 		// a.Infof("version: OpenDiablo2 (%s %s)", a.gitBranch, a.gitCommit)

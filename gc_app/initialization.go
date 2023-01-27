@@ -1,4 +1,4 @@
-package app
+package gc_app
 
 import (
 	"gcraft/gc_common/gc_util"
