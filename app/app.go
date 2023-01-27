@@ -7,6 +7,8 @@ import (
 	"os"
 	"runtime"
 
+	ebiten2 "gcraft/gc_core/gc_audio/ebiten"
+
 	"gcraft/gc_common/gc_util"
 
 	"gcraft/gc_game/gc_gamescreen"
@@ -29,6 +31,7 @@ type App struct {
 	timeScale         float64
 	guiManager        *gc_gui.GuiManager
 	renderer          gc_interface.Renderer
+	audio             gc_interface.AudioProvider
 	screen            *gc_screen.ScreenManager
 	ui                *gc_ui.UIManager
 	errorMessage      error
@@ -111,8 +114,11 @@ func (a *App) loadEngine() error {
 		return a.renderer.Run(a.updateInitError, updateNOOP, 800, 600, "gcraft")
 	}
 
+	audio := ebiten2.CreateAudio()
+
 	uiManager := gc_ui.NewUIManager(renderer)
 
+	a.audio = audio
 	a.ui = uiManager
 
 	return nil
