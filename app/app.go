@@ -1,7 +1,9 @@
 package app
 
 import (
-	"errors"
+	"flag"
+	"fmt"
+	"os"
 	"runtime"
 
 	"golang.org/x/image/colornames"
@@ -12,9 +14,14 @@ import (
 )
 
 type App struct {
-	renderer     gc_interface.Renderer
-	errorMessage error
-	config       *gc_config.Configuration
+	lastTime          float64
+	lastScreenAdvance float64
+	timeScale         float64
+	renderer          gc_interface.Renderer
+	errorMessage      error
+	config            *gc_config.Configuration
+	gitBranch         string
+	gitCommit         string
 	*Options
 }
 
@@ -28,12 +35,16 @@ const (
 	appLoggerPrefix = "App"
 )
 
-func Create() *App {
+func Create(gitBranch, gitCommit string) *App {
 	runtime.LockOSThread()
 
 	app := &App{
-		Options: &Options{},
+		gitBranch: gitBranch,
+		gitCommit: gitCommit,
+		Options:   &Options{},
 	}
+
+	app.parseArguments()
 
 	return app
 }
@@ -48,6 +59,19 @@ func (a *App) Run() (err error) {
 		return err
 	}
 
+	windowTitle := fmt.Sprintf("gocraft (%s)", a.gitBranch)
+
+	if err := a.initialize(); err != nil {
+		if a.errorMessage == nil {
+			a.errorMessage = err
+		}
+
+		gameErr := a.renderer.Run(a.updateInitError, updateNOOP, 800, 600, windowTitle)
+		if gameErr != nil {
+			return gameErr
+		}
+	}
+
 	return nil
 }
 
@@ -60,7 +84,7 @@ func (a *App) loadEngine() error {
 	a.renderer = renderer
 
 	// test error
-	a.errorMessage = errors.New("asd")
+	// a.errorMessage = errors.New("asd")
 
 	if a.errorMessage != nil {
 		return a.renderer.Run(a.updateInitError, updateNOOP, 800, 600, "gcraft")
@@ -84,4 +108,25 @@ func (a *App) updateInitError(target gc_interface.Surface) error {
 func (a *App) LoadConfig() (*gc_config.Configuration, error) {
 	config := &gc_config.Configuration{}
 	return config, nil
+}
+
+func (a *App) parseArguments() {
+	showVersion := flag.Bool("v", false, "Show version")
+	showHelp := flag.Bool("h", false, "Show help")
+
+	flag.Usage = func() {
+		fmt.Printf("usage: %s [<flags>]\n\nFlags:\n", os.Args[0])
+		flag.PrintDefaults()
+	}
+	flag.Parse()
+
+	if *showVersion {
+		// a.Infof("version: OpenDiablo2 (%s %s)", a.gitBranch, a.gitCommit)
+		os.Exit(0)
+	}
+
+	if *showHelp {
+		flag.Usage()
+		os.Exit(0)
+	}
 }

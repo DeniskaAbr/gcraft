@@ -2,6 +2,9 @@ package ebiten
 
 import (
 	"errors"
+	"image"
+
+	"github.com/hajimehoshi/ebiten/v2/ebitenutil"
 
 	"gcraft/gc_common/gc_util"
 
@@ -89,4 +92,11 @@ func CreateRenderer(cfg *gc_config.Configuration) (*Renderer, error) {
 	}
 
 	return result, nil
+}
+
+func (*Renderer) SetWindowIcon(fileName string) {
+	_, iconImage, err := ebitenutil.NewImageFromFile(fileName)
+	if err == nil {
+		ebiten.SetWindowIcon([]image.Image{iconImage})
+	}
 }
