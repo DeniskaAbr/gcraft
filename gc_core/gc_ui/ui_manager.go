@@ -15,3 +15,9 @@ func (ui *UIManager) Reset() {
 func (ui *UIManager) Renderer() gc_interface.Renderer {
 	return ui.renderer
 }
+
+func (ui *UIManager) Advance(elapsed float64) {
+}
+
+func (ui *UIManager) Render(target gc_interface.Surface) {
+}

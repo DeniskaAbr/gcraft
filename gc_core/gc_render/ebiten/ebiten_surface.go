@@ -17,6 +17,10 @@ type ebitenSurface struct {
 	image        *ebiten.Image
 }
 
+func (s *ebitenSurface) GetDepth() int {
+	return len(s.stateStack)
+}
+
 func createEbitenSurface(r *Renderer, img *ebiten.Image, currentState ...surfaceState) *ebitenSurface {
 	state := surfaceState{}
 

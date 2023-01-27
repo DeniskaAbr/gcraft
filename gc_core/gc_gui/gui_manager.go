@@ -9,3 +9,7 @@ func CreateGuiManager() (*GuiManager, error) {
 
 	return manager, nil
 }
+
+func (m *GuiManager) Advance(elapsed float64) error {
+	return nil
+}

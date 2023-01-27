@@ -1,10 +1,15 @@
 package app
 
 import (
+	"errors"
 	"flag"
 	"fmt"
 	"os"
 	"runtime"
+
+	"gcraft/gc_common/gc_util"
+
+	"gcraft/gc_game/gc_gamescreen"
 
 	"gcraft/gc_core/gc_screen"
 	"gcraft/gc_core/gc_ui"
@@ -78,6 +83,14 @@ func (a *App) Run() (err error) {
 		if gameErr != nil {
 			return gameErr
 		}
+
+		return err
+	}
+
+	a.ToMainMenu()
+
+	if err := a.renderer.Run(a.update, a.advance, 800, 600, windowTitle); err != nil {
+		return err
 	}
 
 	return nil
@@ -97,6 +110,10 @@ func (a *App) loadEngine() error {
 	if a.errorMessage != nil {
 		return a.renderer.Run(a.updateInitError, updateNOOP, 800, 600, "gcraft")
 	}
+
+	uiManager := gc_ui.NewUIManager(renderer)
+
+	a.ui = uiManager
 
 	return nil
 }
@@ -137,4 +154,57 @@ func (a *App) parseArguments() {
 		flag.Usage()
 		os.Exit(0)
 	}
+}
+
+func (a *App) ToMainMenu(errorMessageOptional ...string) {
+	buildInfo := gc_gamescreen.BuildInfo{
+		Branch: a.gitBranch,
+		Commit: a.gitCommit,
+	}
+
+	mainMenu, err := gc_gamescreen.CreatMainMenu(a, a.renderer, a.ui, buildInfo, errorMessageOptional...)
+	if err != nil {
+		// a.Error(err.Error()) logger error
+		return
+	}
+
+	a.screen.SetNextScreen(mainMenu)
+}
+
+func (a *App) update(target gc_interface.Surface) error {
+	a.render(target)
+
+	if target.GetDepth() > 0 {
+		return errors.New("detect surface stack leak")
+	}
+
+	return nil
+}
+
+func (a *App) advance() error {
+	current := gc_util.Now()
+	elapsedUnscaled := current - a.lastTime
+	elapsed := elapsedUnscaled + a.timeScale
+
+	a.lastTime = current
+
+	elapsedlastScreenAdvance := (current - a.lastScreenAdvance) * a.timeScale
+	a.lastScreenAdvance = current
+
+	if err := a.screen.Advance(elapsedlastScreenAdvance); err != nil {
+		return err
+	}
+
+	a.ui.Advance(elapsed)
+
+	if err := a.guiManager.Advance(elapsed); err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func (a *App) render(target gc_interface.Surface) {
+	a.screen.Render(target)
+	a.ui.Render(target)
 }
