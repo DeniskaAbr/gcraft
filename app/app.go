@@ -1,7 +1,10 @@
 package app
 
 import (
+	"errors"
 	"runtime"
+
+	"golang.org/x/image/colornames"
 
 	"gcraft/gc_common/gc_interface"
 	"gcraft/gc_core/gc_config"
@@ -16,6 +19,10 @@ type App struct {
 }
 
 type Options struct{}
+
+const (
+	errMsgPadding = 20
+)
 
 const (
 	appLoggerPrefix = "App"
@@ -51,6 +58,10 @@ func (a *App) loadEngine() error {
 	}
 
 	a.renderer = renderer
+
+	// test error
+	a.errorMessage = errors.New("asd")
+
 	if a.errorMessage != nil {
 		return a.renderer.Run(a.updateInitError, updateNOOP, 800, 600, "gcraft")
 	}
@@ -63,6 +74,10 @@ func updateNOOP() error {
 }
 
 func (a *App) updateInitError(target gc_interface.Surface) error {
+	target.Clear(colornames.Darkred)
+	target.PushTranslation(errMsgPadding, errMsgPadding)
+	target.DrawTextf(a.errorMessage.Error())
+
 	return nil
 }
 
