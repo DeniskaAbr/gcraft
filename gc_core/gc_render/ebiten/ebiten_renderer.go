@@ -2,8 +2,8 @@ package ebiten
 
 import (
 	"errors"
-	app_interface "gcraft/common/interface"
-	"gcraft/core/config"
+	"gcraft/gc_common/gc_interface"
+	"gcraft/gc_core/gc_config"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -18,7 +18,7 @@ type Renderer struct {
 	lastRenderError error
 }
 
-type renderCallback = func(surface app_interface.Surface) error
+type renderCallback = func(surface gc_interface.Surface) error
 
 type updateCallback = func() error
 
@@ -70,7 +70,7 @@ func (r *Renderer) Update() error {
 	return r.updateCallback()
 }
 
-func CreateRenderer(cfg *config.Configuration) (*Renderer, error) {
+func CreateRenderer(cfg *gc_config.Configuration) (*Renderer, error) {
 	result := &Renderer{}
 
 	if cfg != nil {

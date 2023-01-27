@@ -1,4 +1,4 @@
-package app_interface
+package gc_interface
 
 type renderCallback = func(Surface) error
 

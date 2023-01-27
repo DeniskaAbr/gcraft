@@ -1,11 +1,11 @@
 package ebiten
 
 import (
-	app_interface "gcraft/common/interface"
+	"gcraft/gc_common/gc_interface"
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
-var _ app_interface.Surface = &ebitenSurface{}
+var _ gc_interface.Surface = &ebitenSurface{}
 
 type ebitenSurface struct {
 	renderer     *Renderer

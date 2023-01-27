@@ -1,16 +1,16 @@
 package app
 
 import (
-	app_interface "gcraft/common/interface"
-	"gcraft/core/config"
-	"gcraft/core/render/ebiten"
+	"gcraft/gc_common/gc_interface"
+	"gcraft/gc_core/gc_config"
+	"gcraft/gc_core/gc_render/ebiten"
 	"runtime"
 )
 
 type App struct {
-	renderer     app_interface.Renderer
+	renderer     gc_interface.Renderer
 	errorMessage error
-	config       *config.Configuration
+	config       *gc_config.Configuration
 	*Options
 }
 
@@ -34,6 +34,10 @@ func Create() *App {
 }
 
 func (a *App) Run() (err error) {
+
+	if a.config, err = a.LoadConfig(); err != nil {
+		return err
+	}
 
 	if err := a.loadEngine(); err != nil {
 		a.renderer.ShowPanicScreen(err.Error())
@@ -63,7 +67,12 @@ func updateNOOP() error {
 	return nil
 }
 
-func (a *App) updateInitError(target app_interface.Surface) error {
+func (a *App) updateInitError(target gc_interface.Surface) error {
 
 	return nil
+}
+
+func (a *App) LoadConfig() (*gc_config.Configuration, error) {
+	config := &gc_config.Configuration{}
+	return config, nil
 }
