@@ -1,4 +1,3 @@
 package gc_interface
 
-type Surface interface {
-}
+type Surface interface{}

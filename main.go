@@ -1,8 +1,9 @@
 package main
 
 import (
-	"gcraft/app"
 	"log"
+
+	"gcraft/app"
 )
 
 func main() {

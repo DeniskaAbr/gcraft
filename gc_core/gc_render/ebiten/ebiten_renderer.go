@@ -2,6 +2,7 @@ package ebiten
 
 import (
 	"errors"
+
 	"gcraft/gc_common/gc_interface"
 	"gcraft/gc_core/gc_config"
 	"github.com/hajimehoshi/ebiten/v2"
@@ -30,7 +31,7 @@ func (r *Renderer) ShowPanicScreen(message string) {
 		panic(err)
 	}
 
-	//TODO implement me
+	// TODO implement me
 	panic("implement me")
 }
 
