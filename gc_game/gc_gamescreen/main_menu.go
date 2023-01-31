@@ -24,6 +24,7 @@ type BuildInfo struct {
 
 type MainMenu struct {
 	screenMode mainMenuScreenMode
+	errorLabel *gc_ui.Label
 
 	renderer  gc_interface.Renderer
 	uiManager *gc_ui.UIManager
@@ -46,10 +47,10 @@ func CreatMainMenu(
 	errorMessageOptional ...string,
 ) (*MainMenu, error) {
 	mainMenu := &MainMenu{
-		navigator:     navigator,
 		screenMode:    ScreenModeUnknown,
 		renderer:      renderer,
 		audioProvider: audioProvider,
+		navigator:     navigator,
 		buildInfo:     buildInfo,
 		uiManager:     ui,
 	}
@@ -59,6 +60,8 @@ func CreatMainMenu(
 	mainMenu.Logger.SetLevel(l)
 
 	if len(errorMessageOptional) != 0 {
+		mainMenu.errorLabel = ui.NewLabel()
+		// mainMenu.errorLabel.SetText(errorMessageOptional[0])
 	}
 
 	return mainMenu, nil
