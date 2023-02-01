@@ -26,11 +26,10 @@ type MainMenu struct {
 	screenMode mainMenuScreenMode
 	errorLabel *gc_ui.Label
 
-	renderer  gc_interface.Renderer
-	uiManager *gc_ui.UIManager
-	navigator gc_interface.Navigator
-
+	renderer      gc_interface.Renderer
+	uiManager     *gc_ui.UIManager
 	audioProvider gc_interface.AudioProvider
+	navigator     gc_interface.Navigator
 
 	buildInfo BuildInfo
 

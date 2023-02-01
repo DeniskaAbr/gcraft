@@ -1,6 +1,9 @@
 package gc_ui
 
-import "gcraft/gc_common/gc_util"
+import (
+	"gcraft/gc_common/gc_interface"
+	"gcraft/gc_common/gc_util"
+)
 
 var _ Widget = &Label{}
 
@@ -26,4 +29,12 @@ func (ui *UIManager) NewLabel() *Label {
 	ui.addWidget(result)
 
 	return result
+}
+
+func (l *Label) Render(target gc_interface.Surface) {
+
+}
+
+func (l *Label) Advance(elapsed float64) error {
+	return nil
 }

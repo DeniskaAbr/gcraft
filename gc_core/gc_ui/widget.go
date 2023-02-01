@@ -6,14 +6,15 @@ type Widget interface {
 }
 
 type BaseWidget struct {
-	visible bool
-
 	manager *UIManager
+
+	visible bool
 }
 
 func NewBaseWidget(manager *UIManager) *BaseWidget {
 	return &BaseWidget{
 		manager: manager,
+		visible: true,
 	}
 }
 
