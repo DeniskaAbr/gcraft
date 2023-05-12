@@ -1,0 +1,30 @@
+---
+run:
+  version:
+  color: always
+  concurrency: 2
+  deadline: 2m
+  issues-exit-code: 1
+  skip-files:
+    - ".+_test.go"
+    - "vendor/*"
+
+output:
+  format: tab
+  print-issued-lines: true
+  print-linter-name: true
+
+linters:
+  enable-all: true
+  disable:
+    - godox
+    - lll
+    - goerr113
+    - funlen
+  fast: false
+
+issues:
+  exclude-use-default: false
+  max-issues-per-linter: 100
+  max-same-issues: 4
+  new: false

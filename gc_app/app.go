@@ -8,6 +8,7 @@ import (
 	"runtime"
 
 	ebiten2 "gcraft/gc_core/gc_audio/ebiten"
+	"gcraft/gc_core/gc_input"
 
 	"gcraft/gc_common/gc_util"
 
@@ -29,18 +30,19 @@ type App struct {
 	lastTime          float64
 	lastScreenAdvance float64
 	timeScale         float64
-	guiManager        *gc_gui.GuiManager
-	renderer          gc_interface.Renderer
-	audio             gc_interface.AudioProvider
-	screen            *gc_screen.ScreenManager
-	ui                *gc_ui.UIManager
-	errorMessage      error
-	config            *gc_config.Configuration
-	gitBranch         string
-	gitCommit         string
-	*Options
 
+	gitBranch    string
+	gitCommit    string
+	inputManager gc_interface.InputManager
+	audio        gc_interface.AudioProvider
+	renderer     gc_interface.Renderer
+	screen       *gc_screen.ScreenManager
+	ui           *gc_ui.UIManager
+	guiManager   *gc_gui.GuiManager
+	config       *gc_config.Configuration
 	*gc_util.Logger
+	errorMessage error
+	*Options
 }
 
 type Options struct {
@@ -121,7 +123,7 @@ func (a *App) loadEngine() error {
 	a.renderer = renderer
 
 	// test error
-	// a.errorMessage = errors.New("asd")
+	// a.errorMessage = errors.New("error test")
 
 	if a.errorMessage != nil {
 		return a.renderer.Run(a.updateInitError, updateNOOP, 800, 600, "gcraft")
@@ -129,8 +131,11 @@ func (a *App) loadEngine() error {
 
 	audio := ebiten2.CreateAudio()
 
+	inputManager := gc_input.NewInputManager()
+
 	uiManager := gc_ui.NewUIManager(renderer)
 
+	a.inputManager = inputManager
 	a.audio = audio
 	a.ui = uiManager
 

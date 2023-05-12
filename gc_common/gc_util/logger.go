@@ -135,7 +135,7 @@ func (l *Logger) Errorf(fmtMsg string, args ...interface{}) {
 	l.Error(fmt.Sprintf(fmtMsg, args...))
 }
 
-// Fatal logs an fatal error message and exits programm
+// Fatal logs an fatal error message and exits program
 func (l *Logger) Fatal(msg string) {
 	defer os.Exit(1)
 
