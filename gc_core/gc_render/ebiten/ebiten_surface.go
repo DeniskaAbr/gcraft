@@ -5,6 +5,7 @@ import (
 	"image/color"
 
 	"gcraft/gc_common/gc_interface"
+
 	"github.com/hajimehoshi/ebiten/v2"
 )
 
@@ -52,4 +53,14 @@ func (s *ebitenSurface) PushTranslation(x, y int) {
 func (s *ebitenSurface) DrawTextf(format string, params ...interface{}) {
 	str := fmt.Sprintf(format, params...)
 	s.Renderer().PrintAt(s.image, str, s.stateCurrent.x, s.stateCurrent.y)
+}
+
+func (s *ebitenSurface) Pop() {
+	count := len(s.stateStack)
+	if count == 0 {
+		panic("empty stack")
+	}
+
+	s.stateCurrent = s.stateStack[count-1]
+	s.stateStack = s.stateStack[:count-1]
 }

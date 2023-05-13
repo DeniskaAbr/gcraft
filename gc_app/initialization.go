@@ -18,7 +18,7 @@ func (a *App) initialize() error {
 
 	a.renderer.SetWindowIcon("logo.png")
 
-	gui, err := gc_gui.CreateGuiManager()
+	gui, err := gc_gui.CreateGuiManager(*a.Options.LogLevel, a.inputManager)
 	if err != nil {
 		return err
 	}
